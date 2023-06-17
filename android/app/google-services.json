@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "609809807065",
+    "project_id": "rent2go-daf9d",
+    "storage_bucket": "rent2go-daf9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609809807065:android:0e15e4c8830c7a32d1b0c8",
+        "android_client_info": {
+          "package_name": "com.example.rent_2_go"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609809807065-l8apmms8ftr2obrpk4t0qm4jfdgt1oa3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn4JKwHYSLvVeJSkBWmdNI7X94nJz2xHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609809807065-l8apmms8ftr2obrpk4t0qm4jfdgt1oa3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
