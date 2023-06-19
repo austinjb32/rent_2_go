@@ -17,24 +17,24 @@ class AddToCart extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: kDefaultPaddin),
       child: Row(
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: kDefaultPaddin),
-            height: 50,
-            width: 58,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: product.color,
-              ),
-            ),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                "assets/icons/add_to_cart.svg",
-                color: product.color,
-              ),
-              onPressed: () {denyCart(context);},
-            ),
-          ),
+          // Container(
+          //   margin: EdgeInsets.only(right: kDefaultPaddin),
+          //   height: 50,
+          //   width: 58,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(18),
+          //     border: Border.all(
+          //       color: product.color,
+          //     ),
+          //   ),
+          //   child: IconButton(
+          //     icon: SvgPicture.asset(
+          //       "assets/icons/add_to_cart.svg",
+          //       color: product.color,
+          //     ),
+          //     onPressed: () {denyCart(context);},
+          //   ),
+          // ),
           Expanded(
             child: SizedBox(
               height: 50,
@@ -46,7 +46,7 @@ class AddToCart extends StatelessWidget {
                   backgroundColor: product.color,
                 ),
                 onPressed: () {
-                 denyOrder(context);
+                  denyOrder(context);
                 },
                 child: Text(
                   "Buy Now".toUpperCase(),
@@ -64,6 +64,7 @@ class AddToCart extends StatelessWidget {
     );
   }
 }
+
 void denyCart(BuildContext context) {
   showDialog(
     context: context,

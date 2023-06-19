@@ -1,71 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/components/components/product_review.dart';
+
 class Product {
-  final String image, title, description;
-  final int price, size, id;
+  final String id;
+  final String image;
+  final int price;
+  final int size;
   final Color color;
+  late List<ProductReview> reviews;
+  final String title;
+  final String description;
+
   Product({
     required this.id,
     required this.image,
-    required this.title,
     required this.price,
-    required this.description,
     required this.size,
     required this.color,
-  });
+    required this.title,
+    required this.description,
+    required List<ProductReview> reviews,
+  }) : reviews = []; // Initialize reviews as an empty list
+
+  factory Product.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    return Product(
+      id: snapshot.id,
+      title: snapshot.data()!['title'],
+      price: snapshot.data()!['price'],
+      size: snapshot.data()!['size'],
+      description: snapshot.data()!['description'],
+      image: snapshot.data()!['image'],
+      color: _parseColor(snapshot.data()!['color']),
+      reviews: [],
+    );
+  }
+
+  Future<void> fetchReviews() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> reviewsSnapshot =
+          await FirebaseFirestore.instance
+              .collection('products')
+              .doc(id)
+              .collection('reviews')
+              .get();
+
+      reviews = reviewsSnapshot.docs.map((doc) {
+        return ProductReview(
+          title: doc.data()['title'],
+          description: doc.data()['description'],
+        );
+      }).toList();
+    } catch (error) {
+      // Handle error
+    }
+  }
+
+  static Color _parseColor(String colorString) {
+    return Color(int.parse(colorString));
+  }
 }
-
-List<Product> products = [
-  Product(
-      id: 1,
-      title: "Office Code",
-      price: 2340,
-      size: 12,
-      description: dummyText,
-      image: "assets/images/bag_1.png",
-      color: Color(0xFF3D82AE)),
-  Product(
-      id: 2,
-      title: "Belt Bag",
-      price: 2304,
-      size: 8,
-      description: dummyText,
-      image: "assets/images/bag_2.png",
-      color: Color(0xFFD3A984)),
-  Product(
-      id: 3,
-      title: "Hang Top",
-      price: 2034,
-      size: 10,
-      description: dummyText,
-      image: "assets/images/bag_3.png",
-      color: Color(0xFF989493)),
-  Product(
-      id: 4,
-      title: "Old Fashion",
-      price: 2434,
-      size: 11,
-      description: dummyText,
-      image: "assets/images/bag_4.png",
-      color: Color(0xFFE6B398)),
-  Product(
-      id: 5,
-      title: "Office Code",
-      price: 2934,
-      size: 12,
-      description: dummyText,
-      image: "assets/images/bag_5.png",
-      color: Color(0xFFFB7883)),
-  Product(
-    id: 6,
-    title: "Office Code",
-    price: 7234,
-    size: 12,
-    description: dummyText,
-    image: "assets/images/bag_6.png",
-    color: Color(0xFFAEAEAE),
-  ),
-];
-
-String dummyText =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since. When an unknown printer took a galley.";

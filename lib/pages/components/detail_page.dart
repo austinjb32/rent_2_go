@@ -3,21 +3,28 @@ import 'package:flutter_svg/svg.dart';
 import '../../constants.dart';
 import '../../pages/components/components/body.dart';
 import '../../models/Product.dart';
+import 'components/product_review.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Product product;
+  final String productId;
 
   const DetailsScreen({
     Key? key,
     required this.product,
+    required this.productId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: product.color,
-      appBar: buildAppBar(context),
-      body: Body(product:product),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: product.color,
+        appBar: buildAppBar(context),
+        body: Body(
+          productId: productId,
+        ),
+      ),
     );
   }
 
@@ -41,7 +48,7 @@ class DetailsScreen extends StatelessWidget {
           icon: SvgPicture.asset("assets/icons/cart.svg"),
           onPressed: () {},
         ),
-        SizedBox(width: kDefaultPaddin / 2),
+        SizedBox(width: 16.0 / 2),
       ],
     );
   }

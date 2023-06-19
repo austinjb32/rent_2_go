@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rent_2_go/models/Product.dart';
 import 'package:rent_2_go/pages/home/components/home.dart';
 import '../../constants.dart';
@@ -9,7 +10,33 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Body(products: products),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error loading products'));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final products = snapshot.data!.docs
+              .map((doc) => Product(
+                    id: doc.id,
+                    title: doc['title'],
+                    price: int.parse(doc['price'].toString()),
+                    size: doc['size'],
+                    description: doc['description'],
+                    image: doc['image'],
+                    color: Color(int.parse(doc['color'].toString())),
+                    reviews: [], // You can fetch reviews as well if needed
+                  ))
+              .toList();
+
+          return Body(products: products);
+        },
+      ),
     );
   }
 
