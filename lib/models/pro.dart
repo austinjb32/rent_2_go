@@ -163,7 +163,7 @@ class ProductCard extends StatelessWidget {
                   product.imageSmall,
                   width: 100,
                   height: 100,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),

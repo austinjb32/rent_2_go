@@ -27,6 +27,26 @@ List<Category> demoCategories = [
     icon: "assets/icons/Filter.svg",
     title: "Books",
   ),
+  Category(
+    icon: "assets/icons/Filter.svg",
+    title: "Cars",
+  ),
+  Category(
+    icon: "assets/icons/Filter.svg",
+    title: "Cars",
+  ),
+  Category(
+    icon: "assets/icons/Filter.svg",
+    title: "Cars",
+  ),
+  Category(
+    icon: "assets/icons/Filter.svg",
+    title: "Cars",
+  ),
+  Category(
+    icon: "assets/icons/Filter.svg",
+    title: "Cars",
+  ),
 ];
 
 class Categories extends StatefulWidget {
@@ -48,21 +68,24 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(
-        widget.categories.length,
-        (index) => GestureDetector(
-          onTap: () {
-            setState(() {
-              _selectedIndex = index;
-            });
-            widget.onCategorySelected(index); // Pass the index here
-          },
-          child: CategoryCard(
-            category: widget.categories[index],
-            isSelected: _selectedIndex == index,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(
+          widget.categories.length,
+          (index) => GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+              widget.onCategorySelected(index); // Pass the index here
+            },
+            child: CategoryCard(
+              category: widget.categories[index],
+              isSelected: _selectedIndex == index,
+            ),
           ),
         ),
       ),

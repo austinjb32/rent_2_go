@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:rent_2_go/add_products.dart';
 import 'package:rent_2_go/constants.dart';
 import 'package:rent_2_go/favourites.dart';
@@ -30,47 +31,29 @@ class _MyHomePageState extends State<MyHomePage> {
     ProfilePage()
   ];
 
-  void _onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.yellow,
-        unselectedItemColor: Colors.black,
+      bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.black,
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.bag_fill),
-            label: 'Your Products',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.heart_fill),
-            label: 'Favourites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_travel),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_2),
-            label: 'Profile',
-          ),
+        color: Colors.yellow,
+        buttonBackgroundColor: Colors.yellow,
+        height: 60,
+        animationDuration: Duration(milliseconds: 200),
+        index: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const <Widget>[
+          Icon(Icons.home, size: 30),
+          Icon(CupertinoIcons.bag_fill, size: 30),
+          Icon(Icons.add, size: 30),
+          Icon(CupertinoIcons.heart_fill, size: 30),
+          Icon(Icons.card_travel, size: 30),
+          Icon(Icons.person_2, size: 30),
         ],
       ),
     );
