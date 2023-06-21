@@ -24,17 +24,70 @@ class Product {
     required this.imageLarge,
   });
 
-  // Add a getter for 'id'
   String get productId => id;
 
-  // Add a getter for 'quantity'
   int get productQuantity => quantity;
 }
 
-class DetailsScreen extends StatelessWidget {
-  final details.Product product; // Use the prefix here
+class DetailsScreen extends StatefulWidget {
+  final details.Product product;
 
   const DetailsScreen({Key? key, required this.product}) : super(key: key);
+
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  bool isFavorite = false;
+
+  Future<void> toggleFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final favoriteRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites');
+
+      if (isFavorite) {
+        favoriteRef.doc(widget.product.id).delete();
+      } else {
+        favoriteRef.doc(widget.product.id).set({
+          'id': widget.product.id,
+          'title': widget.product.title,
+          'price': widget.product.price,
+          'description': widget.product.description,
+          'quantity': widget.product.quantity,
+          'imageLarge': widget.product.imageLarge,
+        });
+      }
+
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfFavorite();
+  }
+
+  Future<void> checkIfFavorite() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final favoriteRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites');
+
+      final favoriteSnapshot = await favoriteRef.doc(widget.product.id).get();
+      setState(() {
+        isFavorite = favoriteSnapshot.exists;
+      });
+    }
+  }
 
   Future<void> addToCart(details.Product product) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -66,12 +119,13 @@ class DetailsScreen extends StatelessWidget {
         leading: const BackButton(color: Colors.black),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: toggleFavorite,
             icon: CircleAvatar(
               backgroundColor: Colors.white,
               child: SvgPicture.asset(
-                "assets/icons/Heart.svg",
+                "assets/icons/heart.svg",
                 height: 20,
+                color: isFavorite ? Colors.red : Colors.grey,
               ),
             ),
           )
@@ -80,7 +134,7 @@ class DetailsScreen extends StatelessWidget {
       body: Column(
         children: [
           Image.network(
-            product.imageLarge,
+            widget.product.imageLarge,
             height: MediaQuery.of(context).size.height * 0.4,
             fit: BoxFit.cover,
           ),
@@ -103,20 +157,20 @@ class DetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          product.title,
+                          widget.product.title,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ),
                       const SizedBox(width: defaultPadding),
                       Text(
-                        "\₹ " + product.price.toString(),
+                        "\₹ " + widget.product.price.toString(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: defaultPadding),
-                    child: Text(product.description ?? ''),
+                    child: Text(widget.product.description ?? ''),
                   ),
                   Text(
                     "Amounts",
@@ -146,13 +200,25 @@ class DetailsScreen extends StatelessWidget {
                       height: 48,
                       child: ElevatedButton(
                         onPressed: () {
-                          addToCart(product);
+                          addToCart(widget.product);
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("Product Rented"),
+                                content: TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              );
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: primaryColor,
                           shape: const StadiumBorder(),
                         ),
-                        child: const Text("Add to Cart"),
+                        child: const Text("Tap to Rent"),
                       ),
                     ),
                   ),

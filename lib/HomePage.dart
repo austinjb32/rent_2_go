@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rent_2_go/add_products.dart';
 import 'package:rent_2_go/constants.dart';
+import 'package:rent_2_go/favourites.dart';
+import 'package:rent_2_go/new_rentals.dart';
 import 'package:rent_2_go/screens/details/components/cartpage.dart';
 import 'package:rent_2_go/screens/details/profile.dart';
 import 'package:rent_2_go/screens/home/home_screen.dart';
@@ -20,8 +23,9 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeScreen(
       isAuthenticated: true,
     ),
-    SearchPage(),
+    UserProductsPage(),
     AddProductPage(),
+    FavoritesPage(),
     CartPage(),
     ProfilePage()
   ];
@@ -48,15 +52,19 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(CupertinoIcons.bag_fill),
+            label: 'Your Products',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Add',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(CupertinoIcons.heart_fill),
+            label: 'Favourites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_travel),
             label: 'Cart',
           ),
           BottomNavigationBarItem(

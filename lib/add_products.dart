@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +19,7 @@ class AddProductPage extends StatefulWidget {
 class _AddProductPageState extends State<AddProductPage> {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   TextEditingController imageController = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -118,15 +120,17 @@ class _AddProductPageState extends State<AddProductPage> {
     int quantity = int.tryParse(quantityController.text) ?? 0;
     String description = descriptionController.text;
 
-    // Get the current user's ID or implement your own logic to get the user ID
-    String userId = 'user123'; // Replace with your logic to get the user ID
-
     try {
       if (_pickedImage != null) {
         final Map<String, String> imageDownloadUrls =
             await _uploadImageToFirebase(_pickedImage!);
         String imageUrlSmall = imageDownloadUrls['urlSmall'] ?? '';
         String imageUrlLarge = imageDownloadUrls['urlLarge'] ?? '';
+
+        final User? user = auth.currentUser;
+        // Get the current user's ID or implement your own logic to get the user ID
+        String userId =
+            user?.uid ?? ''; // Replace with your logic to get the user ID
 
         await productsCollection.add({
           'userId': userId, // Add the userId field
@@ -198,10 +202,11 @@ class _AddProductPageState extends State<AddProductPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                ElevatedButton.icon(
+                FloatingActionButton.extended(
                   onPressed: _pickImage,
-                  icon: const Icon(Icons.image),
-                  label: const Text('Pick Image'),
+                  icon: const Icon(Icons.upload),
+                  label: const Text('Upload Image'),
+                  backgroundColor: Colors.black54,
                 ),
                 if (_pickedImage != null)
                   Image.file(
@@ -210,6 +215,9 @@ class _AddProductPageState extends State<AddProductPage> {
                     width: 200,
                     fit: BoxFit.cover,
                   ),
+                SizedBox(
+                  height: 50,
+                ),
                 TextField(
                   controller: titleController,
                   decoration: const InputDecoration(labelText: 'Title'),
@@ -255,10 +263,11 @@ class _AddProductPageState extends State<AddProductPage> {
                   },
                   decoration: const InputDecoration(labelText: 'Category'),
                 ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
+                const SizedBox(height: 30.0),
+                FloatingActionButton.large(
                   onPressed: addProductToDatabase,
-                  child: const Text('Add Product'),
+                  child: const Icon(Icons.cloud_upload),
+                  backgroundColor: Colors.black87,
                 ),
               ],
             ),

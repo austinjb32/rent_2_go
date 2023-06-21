@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rent_2_go/favourites.dart';
 import 'package:rent_2_go/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rent_2_go/screens/search/search_widget.dart';
 
 import '../../constants.dart';
 import '../../models/pro.dart';
@@ -50,6 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: SvgPicture.asset("assets/icons/menu.svg"),
         ),
         actions: [
+          IconButton(
+            icon: SvgPicture.asset("assets/icons/search.svg"),
+            color: Colors.redAccent,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => (SearchPage())),
+              );
+            },
+          ),
           IconButton(
             icon: SvgPicture.asset("assets/icons/back.svg"),
             onPressed: () {

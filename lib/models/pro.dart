@@ -94,6 +94,7 @@ class _NewArrivalPageState extends State<NewArrivalPage> {
           demoCategories[widget.selectedCategoryIndex].title;
       filteredProducts = products
           .where((product) => product.category == selectedCategory)
+          .where((product) => product.quantity != 0)
           .toList();
     } else {
       filteredProducts = products;
@@ -180,11 +181,6 @@ class ProductCard extends StatelessWidget {
             const SizedBox(height: defaultPadding / 4),
             Text(
               '\₹ ' + product.price.toString(),
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            const SizedBox(height: defaultPadding / 4),
-            Text(
-              'Quantity: ${product.quantity}',
               style: Theme.of(context).textTheme.subtitle1,
             ),
           ],
