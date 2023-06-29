@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:rent_2_go/models/pro.dart';
 import '../constants.dart';
 import '../screens/details/details_screen.dart';
 import '../screens/home/components/categories.dart';
